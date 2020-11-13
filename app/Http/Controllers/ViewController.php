@@ -99,8 +99,10 @@ class ViewController extends Controller
         //
     }
 
-    public function tri($id)
-    {
-        
+    public function tiga($id)
+    {;
+        $image = UnitImage::where('id_unit', $id)->get();
+
+        return response()->json($image);
     }
 }

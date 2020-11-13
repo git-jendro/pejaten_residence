@@ -70,4 +70,5 @@ Route::get('/building/delete/{id}', 'BuildingController@destroy');
 //Route View
 Route::get('/view', 'ViewController@index');
 Route::get('/view/{id}', 'ViewController@show');
+Route::get('/view/360/{id}', 'ViewController@tiga');
 
