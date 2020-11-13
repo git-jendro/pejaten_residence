@@ -101,7 +101,27 @@ class ViewController extends Controller
 
     public function tiga($id)
     {;
-        $image = UnitImage::where('id_unit', $id)->get();
+        $image = UnitImage::where([
+            ['id_unit', $id],
+            ['role', 2]
+        ])->get();
+
+        return response()->json($image);
+    }
+
+    public function vr($id)
+    {;
+        $vr = Unit::where('id_unit', $id)->get();
+
+        return response()->json($vr);
+    }
+
+    public function denah($id)
+    {;
+        $image = UnitImage::where([
+            ['id_unit', $id],
+            ['role', 4]
+        ])->get();
 
         return response()->json($image);
     }

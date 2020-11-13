@@ -80,7 +80,7 @@
                     <h2>The Apartment</h2>
                     <div class="w3-row-padding w3-section">
                         <div class="w3-col s2">
-                            <button class="w3-button w3-block w3-blue w3-left-align" type="button">
+                            <button onclick="back({{$unit->id_unit}})" class="w3-button w3-block w3-blue w3-left-align" type="button">
                                 Detail
                             </button>
                         </div>
@@ -91,32 +91,34 @@
                             </button>
                         </div>
                         <div class="w3-col s2">
-                            <button onclick="vr()" class="w3-button w3-block w3-blue w3-left-align" type="button">
+                            <button onclick="vr({{$unit->id_unit}})" class="w3-button w3-block w3-blue w3-left-align" type="button">
                                 VR
                             </button>
                         </div>
                         <div class="w3-col s2">
-                            <button onclick="denah()" class="w3-button w3-block w3-blue w3-left-align" type="button">
+                            <button onclick="denah({{$unit->id_unit}})" class="w3-button w3-block w3-blue w3-left-align" type="button">
                                 Denah
                             </button>
                         </div>
                     </div>
-                    <div class="w3-display-container mySlides" style="display: block;">
-                        @foreach ($unit->image as $img)
-                        @if ($img->role == 1)
-                        <img src="{{ asset('storage/'.$img->path) }}" style="width:80%;">
-                        @endif
-                        @endforeach
-                    </div>
-                    <hr>
-                    <div class="w3-row-padding w3-section w3-white">
-                        @foreach ($unit->image as $img)
-                        @if ($img->role == 3)
-                        <div class="w3-col s4">
-                            <img src="{{ asset('storage/'.$img->path) }}" style="width:100%;margin-bottom:-6px">
+                    <div id="image">
+                        <div class="w3-display-container mySlides" style="display: block;">
+                            @foreach ($unit->image as $img)
+                                @if ($img->role == 1)
+                                    <img src="{{ asset('storage/'.$img->path) }}" style="width:80%;">
+                                @endif
+                            @endforeach
                         </div>
-                        @endif
-                        @endforeach
+                        <hr>
+                        <div class="w3-row-padding w3-section w3-white">
+                            @foreach ($unit->image as $img)
+                                @if ($img->role == 3)
+                                <div class="w3-col s4">
+                                    <img src="{{ asset('storage/'.$img->path) }}" style="width:100%;margin-bottom:-6px">
+                                </div>
+                                @endif
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             
@@ -162,7 +164,6 @@
     <script type="text/javascript" src="{{asset('pannellum/pannellum.js')}}"></script>
     <script>
         function tiga(id) {
-            var url = 
             $('#content').html('<div class="w3-content" id="content"></div>');
             $('#content').append('<div class="w3-content"><div class="w3-col s2"><button onclick="back('+id+')" class="w3-button w3-block w3-white" type="button">Back</button></div></div>');
             $('#content').append('<div class="w3-content" id="panel"></div>');
@@ -171,21 +172,41 @@
                 url : 'http://localhost:8000/view/360/'+id,
                 success : function(res){
                     $.each(res, function(i, item){
-                        if (item.role == 2) {
-                            console.log(item.path);
-                            pannellum.viewer('panel', {
-                             "type": "equirectangular",
-                             "autoLoad" : true,
-                             "panorama": "http://localhost:8000/storage/"+item.path,
-                             });                   
-                        }
-                    
+                        pannellum.viewer('panel', {
+                        "type": "equirectangular",
+                        "autoLoad" : true,
+                        "panorama": "http://localhost:8000/storage/"+item.path,
+                        });
                     })
                 }
             })
         }
-        function vr() {
-            window.location.replace("http://youtube.com");
+        function vr(id) {
+            $('#image').html('<div class="w3-container w3-white w3-padding-16" id="apartment" style="margin-bottom:10px"></div>');
+             $.ajax({
+                type : 'GET',
+                url : 'http://localhost:8000/view/vr/'+id,
+                success : function(res){
+                    $.each(res, function(i, item){
+                        console.log(item.vr_link);
+                        $('#image').append(item.vr_link);
+                    })
+                }
+            })
+        }
+
+        function denah(id) {
+            $('#image').html('<div class="w3-container w3-white w3-padding-16" id="apartment" style="margin-bottom:10px"></div>');
+             $.ajax({
+                type : 'GET',
+                url : 'http://localhost:8000/view/denah/'+id,
+                success : function(res){
+                    $.each(res, function(i, item){
+                        console.log(item.path);
+                        $('#image').append('<img src="http://localhost:8000/storage/'+item.path+'" style="width:80%;">');
+                    })
+                }
+            })
         }
 
         function back(id) {

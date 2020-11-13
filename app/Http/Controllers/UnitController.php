@@ -106,7 +106,6 @@ class UnitController extends Controller
                 $image->path = $key->storeAs('Unit', $name);
                 $image->role = '3';
                 $image->save();
-                
             };
         }
 
@@ -168,14 +167,15 @@ class UnitController extends Controller
             $unit->harga_sewa   = $request->harga_sewa;
             $unit->harga_cicil  = $request->harga_cicil;
             $unit->diskon       = $request->diskon;
-            $unit->update();
+            $unit->vr_link      = $request->vr_link;
+            $unit->save();
 
             $loop1 = $request->get('id_amenity');
             foreach ($loop1 as $key) {
                 $amenity = AmenityRules::where('id_unit', $id);
                 $amenity->id_unit = $unit->id_unit;
                 $amenity->id_amenity = $key;
-                $amenity->update();
+                $amenity->save();
             };
 
             if (request()->has('utama')) {
@@ -184,7 +184,7 @@ class UnitController extends Controller
                 $utama->id_unit = $unit->id_unit;
                 $utama->path = $request->utama->storeAs('Unit', $name);
                 $utama->role = '1';
-                $utama->update();
+                $utama->save();
             }
             
 
@@ -194,9 +194,18 @@ class UnitController extends Controller
                 $tri->id_unit = $unit->id_unit;
                 $tri->path = $request->tri->storeAs('Unit', $name);
                 $tri->role = '2';
-                $tri->update();
+                $tri->save();
             }
             
+            if (request()->has('denah')) {
+                $denah = new UnitImage;
+                $name = $request->denah->getClientOriginalName();
+                $denah->id_unit = $unit->id_unit;
+                $denah->path = $request->denah->storeAs('Unit', $name);
+                $denah->role = '4';
+                $denah->save();
+            }
+
             if(request()->has('path')){
                 $loop2 = $request->file('path');
                 foreach ($loop2 as $key) {
@@ -204,7 +213,7 @@ class UnitController extends Controller
                     $name = $key->getClientOriginalName();
                     $image->id_unit = $unit->id_unit;
                     $image->path = $key->storeAs('Unit', $name);
-                    $image->update();
+                    $image->save();
                     
                 };
             }
