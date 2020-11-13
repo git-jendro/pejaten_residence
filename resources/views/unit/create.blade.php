@@ -82,6 +82,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row py-2">
                     <div class="col-md-12">
                         <div class="form-group bmd-form-group">
@@ -117,6 +118,24 @@
                         <input type="file" class="form-control" name="tri" id="360">
                     </div>
                 </div>
+                <div class="row py-2">
+                    <div class="col-md-12 py-3">
+                        <label class="bmd-label-floating">Denah Unit</label>
+                        <div class="dgallery py-2">
+
+                        </div>
+                        <input type="file" class="form-control" name="denah" id="denah">
+                    </div>
+                </div>
+                <div class="row py-2">
+                    <div class="col-md-12 py-3">
+                        <label class="bmd-label-floating">Link Video VR</label>
+                        <div class="vid py-2">
+                            <div class="iframe"></div>
+                        </div>
+                        <input type="text" id="vr_link" class="form-control" name="vr_link" onkeyup="link()">
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-primary pull-right">Sumbit</button>
                 <div class="clearfix"></div>
             </form>
@@ -145,6 +164,7 @@
                 var filesAmount = input.files.length;
                 for (i = 0; i < filesAmount; i++) {
                     var reader = new FileReader();
+                        $('.lgallery').html('');
 
                     reader.onload = function(event) {
                         $($.parseHTML('<img>')).attr({src: event.target.result, class: "mr-1", onclick:""}).appendTo(placeToInsertImagePreview);
@@ -163,13 +183,14 @@
 
     $(function() {
         var imagesPreview = function(input, placeToInsertImagePreview) {
-
+            
             if (input.files) {
                 var filesAmount = input.files.length;
                 for (i = 0; i < filesAmount; i++) {
                     var reader = new FileReader();
 
                     reader.onload = function(event) {
+                        $('.ugallery').html('');
                         $($.parseHTML('<img>')).attr({src: event.target.result, class: "mr-1", onclick:""}).appendTo(placeToInsertImagePreview);
                     }
 
@@ -192,6 +213,7 @@
                     var reader = new FileReader();
 
                     reader.onload = function(event) {
+                        $('.tgallery').html('');
                         $($.parseHTML('<img>')).attr({src: event.target.result, class: "mr-1", onclick:""}).appendTo(placeToInsertImagePreview);
                     }
 
@@ -200,11 +222,40 @@
             }
 
         };
-
         $('#360').on('change', function() {
             imagesPreview(this, 'div.tgallery');
         });
     });
+    $(function() {
+        var imagesPreview = function(input, placeToInsertImagePreview) {
 
-    
+            if (input.files) {
+                var filesAmount = input.files.length;
+                for (i = 0; i < filesAmount; i++) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(event) {
+                        $('.dgallery').html('');
+                        $($.parseHTML('<img>')).attr({src: event.target.result, class: "mr-1", onclick:""}).appendTo(placeToInsertImagePreview);
+                    }
+
+                    reader.readAsDataURL(input.files[i]);
+                }
+            }
+
+        };
+        $('#denah').on('change', function() {
+            imagesPreview(this, 'div.dgallery');
+        });
+    });
+
+    function link() {
+        var vr_link = $("#vr_link").val();
+        $.ajax({
+            success : function(res) {
+                console.log(vr_link);
+                $('.iframe').html(vr_link);
+            }
+        })
+    }
 </script>

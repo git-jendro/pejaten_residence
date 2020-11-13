@@ -58,6 +58,7 @@ class UnitController extends Controller
         $unit->harga_sewa   = $request->harga_sewa;
         $unit->harga_cicil  = $request->harga_cicil;
         $unit->diskon       = $request->diskon;
+        $unit->vr_link      = $request->vr_link;
         $unit->save();
 
         $loop1 = $request->get('id_amenity');
@@ -85,6 +86,15 @@ class UnitController extends Controller
             $tri->path = $request->tri->storeAs('Unit', $name);
             $tri->role = '2';
             $tri->save();
+        }
+
+        if (request()->has('denah')) {
+            $denah = new UnitImage;
+            $name = $request->denah->getClientOriginalName();
+            $denah->id_unit = $unit->id_unit;
+            $denah->path = $request->denah->storeAs('Unit', $name);
+            $denah->role = '4';
+            $denah->save();
         }
         
         if(request()->has('path')){
