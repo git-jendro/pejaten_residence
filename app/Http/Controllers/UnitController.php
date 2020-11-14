@@ -171,6 +171,7 @@ class UnitController extends Controller
             $unit->save();
 
             $loop1 = $request->get('id_amenity');
+            
             foreach ($loop1 as $key) {
                 $amenity = AmenityRules::where('id_unit', $id);
                 $amenity->id_unit = $unit->id_unit;
