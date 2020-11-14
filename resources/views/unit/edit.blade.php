@@ -17,7 +17,7 @@
                         </div>
                         <div class="col-4 pt-3">
                             <select name="id_building" class="form-control">
-                                <option value="">
+                                <option value="{{$unit->id_building}}">
                                     {{$unit->building->nama}}
                                 </option>
                                 @foreach ($building as $item)
@@ -42,11 +42,12 @@
                         <label class="bmd-label-floating py-3">Kelengkapan Unit</label>
                         <table class="table">
                             <tr>
+                                <input type="hidden" id="unit" value="{{$unit->id_unit}}">
                                 @foreach ($ame as $item)
                                 <th class="col-md-1 text-center">
                                     <label class="py-2">
-                                        <input type="checkbox" name="id_amenity[]" value="{{$item->id_amenity}}"
-                                            class="form-control" @foreach ($amenity as $a) {{$item->id_amenity == $a->id_amenity ? 'checked' : ''}} @endforeach>
+                                        <input id="id{{$item->id_amenity}}" type="checkbox" name="id_amenity[]" value="{{$item->id_amenity}}"
+                                            onchange="amenity({{$item->id_amenity}})" class="form-control" @foreach ($amenity as $a) {{$item->id_amenity == $a->id_amenity ? 'checked' : ''}} @endforeach>
                                         {{$item->nama}}
                                         <br>
                                         <img src="{{ asset('storage/'.$item->icon) }}" alt="{{$item->id_amenity}}"
@@ -175,6 +176,10 @@
         width: 20%;
     }
 
+    .dgallery img {
+        width: 20%;
+    }
+
 </style>
 <script type="text/javascript">
     $(function() {
@@ -288,4 +293,19 @@
             }
         })
     }
+
+    function amenity(id) {
+        var amenity = $("#id"+id).val();
+        var unit = $("#unit").val();
+        $.ajax({
+            type : 'GET',
+            url : 'http://localhost:8000/unit/'+unit+'/'+amenity,
+            success : function(res) {
+                console.log(res);
+            }
+        })
+    }
+
+    
+    
 </script>

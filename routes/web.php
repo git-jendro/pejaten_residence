@@ -46,7 +46,7 @@ Route::post('/unit/store', 'UnitController@store');
 Route::get('/unit/{id}/edit', 'UnitController@edit');
 Route::patch('/unit/{id}', 'UnitController@update');
 Route::get('/unit/delete/{id}', 'UnitController@destroy');
-Route::get('/unit/main/{main}', 'UnitController@main');
+Route::get('/unit/{unit}/{amenity}', 'UnitController@check');
 // Route::get('/unit/store/{building}/{nama}/{deskripsi}/{jual}/{sewa}/{cicil}/{diskon}/{path}/{amenity}', 'UnitController@store');
 
 //Route Project

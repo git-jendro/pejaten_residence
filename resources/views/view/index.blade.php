@@ -93,7 +93,7 @@
                         @foreach ($unit as $item)
                             <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
                                 <a href="/view/{{$item->id_unit}}">
-                                <div class="member">
+                                <div class="member" style="width: 250px">
                                     <div class="member-img">
                                         @foreach ($item->image as $img)
                                             
@@ -103,7 +103,7 @@
                                     </div>
                                     <div class="member-info">
                                         <h4>{{$item->nama}}</h4>
-                                        <span>{{ Str::limit($item->deskripsi, 30) }}</span>
+                                        <span>{{ Str::limit($item->deskripsi, 20) }}</span>
                                     </div>
                                 </div>
                                 </a>

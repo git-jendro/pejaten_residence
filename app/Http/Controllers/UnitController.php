@@ -168,56 +168,56 @@ class UnitController extends Controller
             $unit->harga_cicil  = $request->harga_cicil;
             $unit->diskon       = $request->diskon;
             $unit->vr_link      = $request->vr_link;
-            $unit->save();
-
-            $loop1 = $request->get('id_amenity');
-            
-            foreach ($loop1 as $key) {
-                $amenity = AmenityRules::where('id_unit', $id);
-                $amenity->id_unit = $unit->id_unit;
-                $amenity->id_amenity = $key;
-                $amenity->save();
-            };
+            // $unit->update();
 
             if (request()->has('utama')) {
-                $utama = new UnitImage;
                 $name = $request->utama->getClientOriginalName();
-                $utama->id_unit = $unit->id_unit;
-                $utama->path = $request->utama->storeAs('Unit', $name);
-                $utama->role = '1';
-                $utama->save();
+                UnitImage::where([
+                    ['id_unit', $id],
+                    ['role', 1]
+                ])->update([
+                    'path' => $request->utama->storeAs('Unit', $name)
+                ]);
+                // dd($image);
             }
-            
+            // if (UnitImage::select('id_image')->where('role', 1)->exists()) {
+            //         $utama = new UnitImage;
+            //         $name = $request->utama->getClientOriginalName();
+            //         $utama->id_unit = $unit->id_unit;
+            //         $utama->path = $request->utama->storeAs('Unit', $name);
+            //         $utama->role = '1';
+            //         $utama->update();
+            //     }
 
-            if (request()->has('tri')) {
-                $tri = new UnitImage;
-                $name = $request->tri->getClientOriginalName();
-                $tri->id_unit = $unit->id_unit;
-                $tri->path = $request->tri->storeAs('Unit', $name);
-                $tri->role = '2';
-                $tri->save();
-            }
+            // if (request()->has('tri')) {
+            //     $tri = new UnitImage;
+            //     $name = $request->tri->getClientOriginalName();
+            //     $tri->id_unit = $unit->id_unit;
+            //     $tri->path = $request->tri->storeAs('Unit', $name);
+            //     $tri->role = '2';
+            //     $tri->update();
+            // }
             
-            if (request()->has('denah')) {
-                $denah = new UnitImage;
-                $name = $request->denah->getClientOriginalName();
-                $denah->id_unit = $unit->id_unit;
-                $denah->path = $request->denah->storeAs('Unit', $name);
-                $denah->role = '4';
-                $denah->save();
-            }
+            // if (request()->has('denah')) {
+            //     $denah = new UnitImage;
+            //     $name = $request->denah->getClientOriginalName();
+            //     $denah->id_unit = $unit->id_unit;
+            //     $denah->path = $request->denah->storeAs('Unit', $name);
+            //     $denah->role = '4';
+            //     $denah->update();
+            // }
 
-            if(request()->has('path')){
-                $loop2 = $request->file('path');
-                foreach ($loop2 as $key) {
-                    $image = new UnitImage();
-                    $name = $key->getClientOriginalName();
-                    $image->id_unit = $unit->id_unit;
-                    $image->path = $key->storeAs('Unit', $name);
-                    $image->save();
+            // if(request()->has('path')){
+            //     $loop2 = $request->file('path');
+            //     foreach ($loop2 as $key) {
+            //         $image = new UnitImage();
+            //         $name = $key->getClientOriginalName();
+            //         $image->id_unit = $unit->id_unit;
+            //         $image->path = $key->storeAs('Unit', $name);
+            //         $image->update();
                     
-                };
-            }
+            //     };
+            // }
             return redirect()->action('UnitController@index');
         }
 
@@ -236,4 +236,14 @@ class UnitController extends Controller
         return redirect()->action('UnitController@index');
     }
 
+    public function check($unit,  $amenity)
+    {
+        $check = AmenityRules::where([
+            ['id_unit', $unit],
+            ['id_amenity', $amenity]
+        ])->count();
+        
+        
+        return response()->json($check);
+    }
 }
