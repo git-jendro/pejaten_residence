@@ -243,7 +243,23 @@ class UnitController extends Controller
             ['id_amenity', $amenity]
         ])->count();
         
+        if ($check == 0) {
+            AmenityRules::create([
+                'id_unit'       => $unit,
+                'id_amenity'    => $amenity
+            ]);
+
+            return response()->json('Input');
+        } else {
+            AmenityRules::where([
+                ['id_unit', $unit],
+                ['id_amenity', $amenity]
+            ])->delete();
+
+            return response()->json('Hapus');
+        }
         
-        return response()->json($check);
+        
+        // return response()->json($check);
     }
 }
