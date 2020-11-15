@@ -100,7 +100,7 @@ class UnitController extends Controller
         if(request()->has('path')){
             $loop2 = $request->file('path');
             foreach ($loop2 as $key) {
-                $image = new UnitImage();
+                $image = new UnitImage;
                 $name = $key->getClientOriginalName();
                 $image->id_unit = $unit->id_unit;
                 $image->path = $key->storeAs('Unit', $name);
@@ -178,46 +178,46 @@ class UnitController extends Controller
                 ])->update([
                     'path' => $request->utama->storeAs('Unit', $name)
                 ]);
-                // dd($image);
             }
-            // if (UnitImage::select('id_image')->where('role', 1)->exists()) {
-            //         $utama = new UnitImage;
-            //         $name = $request->utama->getClientOriginalName();
-            //         $utama->id_unit = $unit->id_unit;
-            //         $utama->path = $request->utama->storeAs('Unit', $name);
-            //         $utama->role = '1';
-            //         $utama->update();
-            //     }
-
-            // if (request()->has('tri')) {
-            //     $tri = new UnitImage;
-            //     $name = $request->tri->getClientOriginalName();
-            //     $tri->id_unit = $unit->id_unit;
-            //     $tri->path = $request->tri->storeAs('Unit', $name);
-            //     $tri->role = '2';
-            //     $tri->update();
-            // }
             
-            // if (request()->has('denah')) {
-            //     $denah = new UnitImage;
-            //     $name = $request->denah->getClientOriginalName();
-            //     $denah->id_unit = $unit->id_unit;
-            //     $denah->path = $request->denah->storeAs('Unit', $name);
-            //     $denah->role = '4';
-            //     $denah->update();
-            // }
+            if (request()->has('tri')) {
+                $name = $request->tri->getClientOriginalName();
+                UnitImage::where([
+                    ['id_unit', $id],
+                    ['role', 2]
+                ])->update([
+                    'path' => $request->tri->storeAs('Unit', $name)
+                ]);
+            }
 
-            // if(request()->has('path')){
-            //     $loop2 = $request->file('path');
-            //     foreach ($loop2 as $key) {
-            //         $image = new UnitImage();
-            //         $name = $key->getClientOriginalName();
-            //         $image->id_unit = $unit->id_unit;
-            //         $image->path = $key->storeAs('Unit', $name);
-            //         $image->update();
-                    
-            //     };
-            // }
+            if (request()->has('denah')) {
+                $name = $request->denah->getClientOriginalName();
+                UnitImage::where([
+                    ['id_unit', $id],
+                    ['role', 4]
+                ])->update([
+                    'path' => $request->denah->storeAs('Unit', $name)
+                ]);
+            }
+
+            if(request()->has('path')){
+                UnitImage::where([
+                    ['id_unit', $id],
+                    ['role', 3]
+                ])->delete();
+                $loop2 = $request->file('path');
+                foreach ($loop2 as $key) {
+                    $image = new UnitImage;
+                    $name = $key->getClientOriginalName();
+                    $image->id_unit = $unit->id_unit;
+                    $image->path = $key->storeAs('Unit', $name);
+                    $image->role = '3';
+                    $image->save();
+                };
+        }
+            
+
+
             return redirect()->action('UnitController@index');
         }
 
